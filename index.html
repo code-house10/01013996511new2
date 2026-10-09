@@ -76,11 +76,11 @@ header a:hover,header button:hover{color:var(--primary)}
 .modal-backdrop{background:rgba(10,17,39,.78);backdrop-filter:blur(4px)}
 .review-popup{transition:opacity .5s ease-in-out,transform .5s ease-in-out;opacity:0;transform:translateX(-20px)}
 .review-popup.show{opacity:1;transform:translateX(0)}
-/* Original YouTube hero video is visible behind the original moving-service message */
+/* Native HTML5 video: no embedded player channel metadata or interface */
 .hero-cinema{position:relative;isolation:isolate;min-height:625px;background:#111D3D;overflow:hidden;display:flex;align-items:center;color:white}
 .hero-video-frame{position:absolute;inset:0;overflow:hidden;z-index:-3;background:#101A34 url('https://ik.imagekit.io/mkek1asn5/images/sherouk2/post14.webp') center/cover no-repeat}
-.hero-video-frame iframe{position:absolute;top:50%;left:50%;width:100%;height:100%;border:0;transform:translate(-50%,-50%);pointer-events:none;display:block}
-.hero-cinema::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(to left,rgba(10,19,43,.78) 0%,rgba(15,25,53,.57) 33%,rgba(15,25,53,.24) 66%,rgba(15,25,53,.05) 100%);pointer-events:none}
+.hero-video-frame video{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover;object-position:center;pointer-events:none}
+.hero-cinema::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(to left,rgba(10,19,43,.64) 0%,rgba(15,25,53,.42) 33%,rgba(15,25,53,.15) 66%,rgba(15,25,53,.03) 100%);pointer-events:none}
 .hero-cinema::after{content:"";position:absolute;inset:auto 0 0;height:115px;z-index:-1;background:linear-gradient(0deg,rgba(12,23,49,.34),transparent);pointer-events:none}
 .hero-cinema .hero-inner{width:100%;padding-top:74px;padding-bottom:99px}
 .hero-kicker{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.13);color:white;border:1px solid rgba(255,255,255,.29);backdrop-filter:blur(10px);padding:9px 17px;border-radius:999px;font-size:13px;font-weight:900;margin-bottom:22px}
@@ -150,11 +150,11 @@ footer{background:#101A34!important}
 @media(max-width:767px){
  body{padding-bottom:86px}
  header nav{min-height:66px}
- /* Mobile: keep the entire 16:9 YouTube picture visible, rather than cropping it
+ /* Mobile: keep the entire 16:9 native video visible, rather than cropping it
     or placing a dark text overlay over the moving footage. The hero copy sits below. */
  .hero-cinema{min-height:0;display:flex;flex-direction:column;align-items:stretch;background:#101A34}
  .hero-video-frame{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:16/9;flex:none;z-index:1;overflow:hidden;background:#101A34;border-bottom:2px solid rgba(255,119,87,.4)}
- .hero-video-frame iframe{position:absolute;inset:0;top:0;left:0;transform:none;width:100%;height:100%;border:0;display:block}
+ .hero-video-frame video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block}
  .hero-cinema::before,.hero-cinema::after{display:none}
  .hero-cinema .hero-inner{width:100%;padding-top:30px;padding-bottom:24px}
  .hero-video-credit{position:relative;inset:auto;right:auto;left:auto;bottom:auto;top:auto;align-self:flex-start;margin:0 20px 24px;font-size:11px}
@@ -224,12 +224,13 @@ footer{background:#101A34!important}
 </div>
 </header>
 <main>
-<!-- Full-width video hero: restored original YouTube video (vsDXbS9tzns) -->
+<!-- Self-hosted original MP4 video hero: no YouTube embed -->
 <section id="hero" class="hero-cinema">
   <div class="hero-video-frame" id="hero-video-frame" aria-hidden="true">
-    <iframe id="hero-video-iframe" title="فيديو خدمات شركة الشروق لنقل العفش"
-      src="https://www.youtube.com/embed/vsDXbS9tzns?autoplay=1&amp;mute=1&amp;loop=1&amp;playlist=vsDXbS9tzns&amp;controls=0&amp;rel=0&amp;playsinline=1&amp;modestbranding=1"
-      allow="autoplay; encrypted-media; picture-in-picture" tabindex="-1"></iframe>
+    <video id="hero-video" autoplay muted loop playsinline preload="metadata" poster="hero-poster.jpg" aria-label="فيديو نقل وتغليف الأثاث لدى شركة الشروق" tabindex="-1" disablepictureinpicture>
+      <source src="herovideo.mp4" type="video/mp4"/>
+      متصفحك لا يدعم تشغيل فيديو HTML5.
+    </video>
   </div>
   <div class="hero-inner container mx-auto px-5 md:px-6 relative z-10">
     <div class="max-w-[730px] text-right">
@@ -243,9 +244,9 @@ footer{background:#101A34!important}
       <div class="hero-features"><span><i class="fas fa-check-circle"></i>تغليف احترافي</span><span><i class="fas fa-check-circle"></i>سيارات مجهزة</span><span><i class="fas fa-check-circle"></i>ونش رفع العفش</span></div>
     </div>
   </div>
-  <a class="hero-video-credit" href="https://www.youtube.com/watch?v=vsDXbS9tzns" target="_blank" rel="noopener noreferrer" aria-label="مشاهدة الفيديو على يوتيوب مع الصوت">
-    <span class="play-dot"><i class="fas fa-play"></i></span><span>شاهد الفيديو بالصوت</span>
-  </a>
+  <button type="button" class="hero-video-credit" id="hero-sound-toggle" aria-label="تشغيل صوت الفيديو" aria-pressed="false">
+    <span class="play-dot"><i id="hero-sound-icon" class="fas fa-volume-xmark" aria-hidden="true"></i></span><span id="hero-sound-label">شغّل صوت الفيديو</span>
+  </button>
 </section>
 <!-- 🚀 NEW HERO CONTENT SECTION -->
 <section class="usp-strip bg-white" id="hero-content">
@@ -593,25 +594,37 @@ footer{background:#101A34!important}
             
 
 
-            // Cover the video hero at 16:9, preserving the original video's aspect ratio.
-            const videoFrame = document.getElementById('hero-video-frame');
-            const videoIframe = document.getElementById('hero-video-iframe');
-            if (videoFrame && videoIframe) {
-                const sizeHeroVideo = () => {
-                    const w = videoFrame.clientWidth;
-                    const h = videoFrame.clientHeight;
-                    const ratio = 16 / 9;
-                    if (w / h > ratio) {
-                        videoIframe.style.width = `${w}px`;
-                        videoIframe.style.height = `${w / ratio}px`;
-                    } else {
-                        videoIframe.style.width = `${h * ratio}px`;
-                        videoIframe.style.height = `${h}px`;
-                    }
-                };
-                sizeHeroVideo();
-                if ('ResizeObserver' in window) new ResizeObserver(sizeHeroVideo).observe(videoFrame);
-                else window.addEventListener('resize', sizeHeroVideo);
+            // Native HTML5 background video: silent autoplay and user-triggered audio.
+            const heroVideo = document.getElementById('hero-video');
+            const heroSoundButton = document.getElementById('hero-sound-toggle');
+            const heroSoundLabel = document.getElementById('hero-sound-label');
+            const heroSoundIcon = document.getElementById('hero-sound-icon');
+            if (heroVideo) {
+                heroVideo.muted = true;
+                heroVideo.defaultMuted = true;
+                heroVideo.playsInline = true;
+                // Some browsers restrict autoplay until the user interacts with the page.
+                const attemptedAutoplay = heroVideo.play();
+                if (attemptedAutoplay && typeof attemptedAutoplay.catch === 'function') {
+                    attemptedAutoplay.catch(() => {
+                        // Autoplay may be blocked by browser/device settings.
+                        if (heroSoundLabel) heroSoundLabel.textContent = 'شغّل الفيديو';
+                        if (heroSoundButton) heroSoundButton.setAttribute('aria-label', 'تشغيل الفيديو');
+                    });
+                }
+                if (heroSoundButton) {
+                    heroSoundButton.addEventListener('click', async () => {
+                        if (heroVideo.paused) {
+                            try { await heroVideo.play(); } catch (e) { return; }
+                        }
+                        heroVideo.muted = !heroVideo.muted;
+                        const soundOn = !heroVideo.muted;
+                        heroSoundButton.setAttribute('aria-pressed', String(soundOn));
+                        heroSoundButton.setAttribute('aria-label', soundOn ? 'كتم صوت الفيديو' : 'تشغيل صوت الفيديو');
+                        if (heroSoundLabel) heroSoundLabel.textContent = soundOn ? 'اكتم الصوت' : 'شغّل صوت الفيديو';
+                        if (heroSoundIcon) heroSoundIcon.className = soundOn ? 'fas fa-volume-high' : 'fas fa-volume-xmark';
+                    });
+                }
             }
 
             // --- Mobile Menu Toggle ---
