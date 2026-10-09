@@ -67,6 +67,10 @@ body{font-family:'Cairo',sans-serif;background:#FAFBFF;color:var(--ink);padding-
 header{background:rgba(255,255,255,.97)!important;border-top:3px solid var(--coral);border-bottom:1px solid var(--border);backdrop-filter:blur(16px)}
 header nav{min-height:74px}
 header a:hover,header button:hover{color:var(--primary)}
+/* Two-line brand lockup: English primary title, smaller Arabic subtitle (header only) */
+.header-brand{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;text-decoration:none;min-width:0}
+.header-brand-en{display:block;font-family:Arial,"Segoe UI",sans-serif;direction:ltr;unicode-bidi:isolate;font-size:clamp(17px,1.75vw,24px);line-height:1.2;font-weight:800;letter-spacing:-.3px;white-space:nowrap}
+.header-brand-ar{display:block;font-size:12px;line-height:1.35;font-weight:700;white-space:nowrap}
 #mobile-menu{border-top:1px solid var(--border)}
 #mobile-menu a{font-weight:700}
 .modal-backdrop{background:rgba(10,17,39,.78);backdrop-filter:blur(4px)}
@@ -76,8 +80,8 @@ header a:hover,header button:hover{color:var(--primary)}
 .hero-cinema{position:relative;isolation:isolate;min-height:625px;background:#111D3D;overflow:hidden;display:flex;align-items:center;color:white}
 .hero-video-frame{position:absolute;inset:0;overflow:hidden;z-index:-3;background:#101A34 url('https://ik.imagekit.io/mkek1asn5/images/sherouk2/post14.webp') center/cover no-repeat}
 .hero-video-frame iframe{position:absolute;top:50%;left:50%;width:100%;height:100%;border:0;transform:translate(-50%,-50%);pointer-events:none;display:block}
-.hero-cinema::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(to left,rgba(10,19,43,.96) 0%,rgba(15,25,53,.89) 33%,rgba(15,25,53,.56) 66%,rgba(15,25,53,.27) 100%);pointer-events:none}
-.hero-cinema::after{content:"";position:absolute;inset:auto 0 0;height:115px;z-index:-1;background:linear-gradient(0deg,rgba(12,23,49,.65),transparent);pointer-events:none}
+.hero-cinema::before{content:"";position:absolute;inset:0;z-index:-2;background:linear-gradient(to left,rgba(10,19,43,.78) 0%,rgba(15,25,53,.57) 33%,rgba(15,25,53,.24) 66%,rgba(15,25,53,.05) 100%);pointer-events:none}
+.hero-cinema::after{content:"";position:absolute;inset:auto 0 0;height:115px;z-index:-1;background:linear-gradient(0deg,rgba(12,23,49,.34),transparent);pointer-events:none}
 .hero-cinema .hero-inner{width:100%;padding-top:74px;padding-bottom:99px}
 .hero-kicker{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.13);color:white;border:1px solid rgba(255,255,255,.29);backdrop-filter:blur(10px);padding:9px 17px;border-radius:999px;font-size:13px;font-weight:900;margin-bottom:22px}
 .hero-kicker i{color:var(--coral)}
@@ -146,12 +150,18 @@ footer{background:#101A34!important}
 @media(max-width:767px){
  body{padding-bottom:86px}
  header nav{min-height:66px}
- .hero-cinema{min-height:660px;align-items:flex-start}
- .hero-cinema .hero-inner{padding-top:54px;padding-bottom:112px}
- .hero-cinema::before{background:linear-gradient(to bottom,rgba(10,19,43,.93),rgba(12,21,47,.83) 50%,rgba(12,21,47,.66) 80%,rgba(12,21,47,.72))}
+ /* Mobile: keep the entire 16:9 YouTube picture visible, rather than cropping it
+    or placing a dark text overlay over the moving footage. The hero copy sits below. */
+ .hero-cinema{min-height:0;display:flex;flex-direction:column;align-items:stretch;background:#101A34}
+ .hero-video-frame{position:relative;inset:auto;width:100%;height:auto;aspect-ratio:16/9;flex:none;z-index:1;overflow:hidden;background:#101A34;border-bottom:2px solid rgba(255,119,87,.4)}
+ .hero-video-frame iframe{position:absolute;inset:0;top:0;left:0;transform:none;width:100%;height:100%;border:0;display:block}
+ .hero-cinema::before,.hero-cinema::after{display:none}
+ .hero-cinema .hero-inner{width:100%;padding-top:30px;padding-bottom:24px}
+ .hero-video-credit{position:relative;inset:auto;right:auto;left:auto;bottom:auto;top:auto;align-self:flex-start;margin:0 20px 24px;font-size:11px}
+ .header-brand-en{font-size:17px}
+ .header-brand-ar{font-size:11px}
  .hero-title{font-size:2.15rem;line-height:1.42}
  .hero-description{font-size:14px;line-height:1.9}
- .hero-video-credit{right:18px;left:auto;bottom:20px;font-size:11px}
  .hero-btn{padding:12px 14px;min-height:49px;font-size:13px}
  .usp-card{padding:12px 4px}
  .proof-card{min-height:205px}
@@ -178,7 +188,10 @@ footer{background:#101A34!important}
 <!-- Logo -->
 <div class="flex items-center">
 <img alt="شعار شركة الشروق لنقل الأثاث" class="w-12 h-12 md:w-14 md:h-14 object-contain ml-3" src="https://ik.imagekit.io/mkek1asn5/images/logo.png?updatedAt=1773687772767"/>
-<a class="text-xl md:text-2xl font-black text-deep-blue whitespace-nowrap" href="#">شركة الشروق</a>
+<a class="header-brand text-deep-blue" href="#" aria-label="El Sherouk moving — الشروق لنقل العفش">
+  <span class="header-brand-en" lang="en" dir="ltr">El Sherouk moving</span>
+  <span class="header-brand-ar" lang="ar">الشروق لنقل العفش</span>
+</a>
 </div>
 <!-- Desktop Menu & Social Icons -->
 <div class="hidden md:flex items-center space-x-8 space-x-reverse">
